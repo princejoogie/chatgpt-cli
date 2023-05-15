@@ -8,14 +8,14 @@ import App from "./app.js";
 const cli = meow(
   `
 	Usage
-	  $ chatgpt-cli
+	  $ gpt
 
 	Options
-		--name  Your name
+		--version View version
+    --help    View help
 
 	Examples
-	  $ chatgpt-cli --name=Jane
-	  Hello, Jane
+	  $ gpt
 `,
   {
     importMeta: import.meta,

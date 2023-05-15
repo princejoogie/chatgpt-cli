@@ -1,29 +1,29 @@
 {
   "name": "@princejoogie/chatgpt-cli",
+  "private": false,
   "version": "0.2.2",
   "license": "MIT",
   "author": "princejoogie",
-  "private": false,
-  "publishConfig": {
-    "access": "public"
-  },
   "main": "dist/cli.js",
   "types": "dist/cli.d.ts",
+  "homepage": "https://github.com/princejoogie/chatgpt-cli#chatgpt-cli",
+  "type": "module",
   "bin": {
     "gpt": "dist/cli.js"
   },
-  "type": "module",
-  "engines": {
-    "node": ">=16"
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/princejoogie/chatgpt-cli.git"
   },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "start": "node dist/cli.js"
+    "start": "node dist/cli.js",
+    "release": "pnpm build && changeset publish"
   },
-  "files": [
-    "dist"
-  ],
   "dependencies": {
     "@changesets/cli": "^2.26.1",
     "@inkjs/ui": "^1.0.0",
