@@ -1,5 +1,11 @@
 # @princejoogie/chatgpt-cli
 
+## 0.2.5
+
+### Patch Changes
+
+- e1e258d: remove unused dependencies
+
 ## 0.2.4
 
 ### Patch Changes
