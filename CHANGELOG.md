@@ -1,5 +1,12 @@
 # @princejoogie/chatgpt-cli
 
+## 0.2.3
+
+### Patch Changes
+
+- e211af2: add github workflow
+- eee68b0: fix workflow
+
 ## 0.2.2
 
 ### Patch Changes

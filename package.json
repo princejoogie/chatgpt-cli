@@ -1,7 +1,7 @@
 {
   "name": "@princejoogie/chatgpt-cli",
   "private": false,
-  "version": "0.2.2",
+  "version": "0.2.3",
   "license": "MIT",
   "author": "princejoogie",
   "main": "dist/cli.js",
@@ -22,7 +22,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "start": "node dist/cli.js",
-    "release": "pnpm build && changeset publish"
+    "release": "pnpm build && changeset version && changeset publish"
   },
   "dependencies": {
     "@changesets/cli": "^2.26.1",
