@@ -1,5 +1,12 @@
 # @princejoogie/chatgpt-cli
 
+## 0.2.4
+
+### Patch Changes
+
+- 5cbf28b: add initial structure for config
+- test
+
 ## 0.2.3
 
 ### Patch Changes
