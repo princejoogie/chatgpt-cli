@@ -2,7 +2,7 @@
 
 ChatGpt in your terminal
 
-![demo](https://github.com/princejoogie/chatgpt-cli/assets/47204120/ebdfffb7-7f5e-4898-87ef-9377feec309f)
+![pwsh_dVWwkFR8TQ](https://github.com/princejoogie/chatgpt-cli/assets/47204120/8f986d38-33e6-4064-bb10-6cb5ef6af87c)
 
 ## Usage
 
