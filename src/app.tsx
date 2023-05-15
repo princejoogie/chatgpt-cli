@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
 import https from "https";
+import React, { useState, useEffect } from "react";
 import { Spinner, TextInput } from "@inkjs/ui";
 import { Text, Box } from "ink";
 import { Result } from "meow";
