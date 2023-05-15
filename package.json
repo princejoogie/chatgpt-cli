@@ -22,7 +22,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "start": "node dist/cli.js",
-    "release": "pnpm build && changeset version && changeset publish"
+    "release": "pnpm build && changeset publish"
   },
   "dependencies": {
     "@changesets/cli": "^2.26.1",
