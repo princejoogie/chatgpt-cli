@@ -1,5 +1,11 @@
 # @princejoogie/chatgpt-cli
 
+## 0.2.6
+
+### Patch Changes
+
+- 5c755f6: update readme
+
 ## 0.2.5
 
 ### Patch Changes
