@@ -12,25 +12,22 @@ type Message = {
 let inputIdx = 0;
 
 const MessageItem = ({ msg }: { msg: Message }) => {
+  const isUser = msg.role === "user";
   return (
     <Box
+      alignSelf={isUser ? "flex-end" : "flex-start"}
       borderColor={msg.role === "user" ? "green" : "blue"}
       borderStyle="single"
-      borderTop={false}
-      borderBottom={false}
-      borderLeft={true}
-      borderRight={false}
+      marginLeft={isUser ? 5 : 0}
+      marginRight={isUser ? 0 : 5}
     >
-      <Text color={msg.role === "user" ? "green" : "blue"}>
-        {msg.role === "user" ? "User: " : "Gpt:  "}
-      </Text>
       <Text>{msg.content}</Text>
     </Box>
   );
 };
 
 export default function App({ cli }: { cli: Result<{}> }) {
-  const [isDone, setIsDone] = useState(false);
+  const [isDone, setIsDone] = useState(true);
   const [chunkedResponse, setChunkedResponse] = useState("");
   const [messages, setMessages] = useState<Array<Message>>([
     {
@@ -116,21 +113,14 @@ export default function App({ cli }: { cli: Result<{}> }) {
           <MessageItem key={`message-${idx}`} msg={msg} />
         ))}
 
-        {!!chunkedResponse && (
+        {!isDone && (
           <Box
+            alignSelf="flex-start"
             borderColor="red"
             borderStyle="single"
-            borderTop={false}
-            borderBottom={false}
-            borderLeft={true}
-            borderRight={false}
+            marginRight={5}
           >
-            <Box>
-              <Text>Gpt:</Text>
-              <Spinner />
-              <Text> </Text>
-            </Box>
-            <Text>{chunkedResponse}</Text>
+            {!chunkedResponse ? <Spinner /> : <Text>{chunkedResponse}</Text>}
           </Box>
         )}
       </Box>
@@ -144,6 +134,7 @@ export default function App({ cli }: { cli: Result<{}> }) {
           placeholder="Send a message."
           onSubmit={async (content) => {
             inputIdx++;
+            setIsDone(false);
             setMessages((old) => [...old, { role: "user", content }]);
             getStreamedResponse(content, messages);
           }}
