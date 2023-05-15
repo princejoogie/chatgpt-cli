@@ -1,7 +1,7 @@
 {
   "name": "@princejoogie/chatgpt-cli",
   "private": false,
-  "version": "0.2.6",
+  "version": "0.2.7",
   "license": "MIT",
   "author": "princejoogie",
   "main": "dist/cli.js",

@@ -1,5 +1,11 @@
 # @princejoogie/chatgpt-cli
 
+## 0.2.7
+
+### Patch Changes
+
+- 7253689: remove unused dev deps
+
 ## 0.2.6
 
 ### Patch Changes
