@@ -7,15 +7,15 @@ import App from "./app.js";
 
 const cli = meow(
   `
-	Usage
-	  $ gpt
+  Usage
+    $ gpt
 
-	Options
-		--version View version
+  Options
+    --version View version
     --help    View help
 
-	Examples
-	  $ gpt
+  Examples
+    $ gpt
 `,
   {
     importMeta: import.meta,
