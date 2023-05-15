@@ -1,12 +1,14 @@
 {
   "name": "@princejoogie/chatgpt-cli",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "license": "MIT",
   "author": "princejoogie",
   "private": false,
   "publishConfig": {
     "access": "public"
   },
+  "main": "dist/cli.js",
+  "types": "dist/cli.d.ts",
   "bin": {
     "gpt": "dist/cli.js"
   },
