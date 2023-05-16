@@ -2,7 +2,7 @@ import https from "https";
 import React, { useState, useEffect } from "react";
 import { Spinner, TextInput } from "@inkjs/ui";
 import { Text, Box } from "ink";
-import { Result } from "meow";
+import { type Result } from "meow";
 
 type Message = {
   role: "system" | "user" | "assistant";
@@ -26,10 +26,10 @@ const MessageItem = ({ msg }: { msg: Message }) => {
   );
 };
 
-export default function App({ cli }: { cli: Result<{}> }) {
+export default function App({ cli }: { cli: Result<any> }) {
   const [isDone, setIsDone] = useState(true);
   const [chunkedResponse, setChunkedResponse] = useState("");
-  const [messages, setMessages] = useState<Array<Message>>([
+  const [messages, setMessages] = useState<Message[]>([
     {
       role: "system",
       content: "Hey there! What can I help you with today?",
@@ -70,7 +70,9 @@ export default function App({ cli }: { cli: Result<{}> }) {
           rawArray.forEach((e) => {
             const parsed = JSON.parse(e);
             if (parsed.choices[0].delta.content) {
-              setChunkedResponse((e) => e + parsed.choices[0].delta.content);
+              setChunkedResponse(
+                (e) => `${e}${parsed.choices[0].delta.content}`
+              );
             }
           });
         });

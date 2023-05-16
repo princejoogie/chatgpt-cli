@@ -18,5 +18,6 @@ module.exports = {
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/restrict-template-expressions": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/no-misused-promises": "off",
   },
 };
