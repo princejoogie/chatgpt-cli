@@ -4,17 +4,19 @@
   "version": "0.2.7",
   "license": "MIT",
   "author": "princejoogie",
-  "main": "dist/cli.js",
-  "types": "dist/cli.d.ts",
-  "homepage": "https://github.com/princejoogie/chatgpt-cli#chatgpt-cli",
   "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "homepage": "https://github.com/princejoogie/chatgpt-cli#chatgpt-cli",
   "bin": {
     "gpt": "dist/cli.js"
   },
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "start": "node dist/cli.js",
+    "dev": "tsup --watch",
+    "lint": "eslint --fix src/**/*.ts",
+    "start": "node dist/index.js",
+    "clean": "rimraf dist",
+    "build": "pnpm lint && rimraf dist/ && tsup",
     "release": "pnpm build && changeset publish"
   },
   "dependencies": {
@@ -25,8 +27,21 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
+    "@types/node": "^20.1.5",
     "@types/react": "^18.2.6",
+    "@typescript-eslint/eslint-plugin": "^5.59.6",
+    "@typescript-eslint/parser": "^5.59.6",
+    "eslint": "^8.40.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
     "prettier": "^2.8.8",
+    "rimraf": "^5.0.0",
+    "tsup": "^6.7.0",
+    "tsx": "^3.12.7",
     "typescript": "^5.0.4"
   },
   "publishConfig": {
