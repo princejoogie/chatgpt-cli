@@ -1,5 +1,11 @@
 # @princejoogie/chatgpt-cli
 
+## 0.3.2
+
+### Patch Changes
+
+- dac4b1d: fix eslint
+
 ## 0.3.1
 
 ### Patch Changes
