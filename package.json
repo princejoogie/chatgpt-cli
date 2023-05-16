@@ -9,7 +9,7 @@
   "types": "dist/index.d.ts",
   "homepage": "https://github.com/princejoogie/chatgpt-cli#chatgpt-cli",
   "bin": {
-    "gpt": "dist/cli.js"
+    "gpt": "dist/index.js"
   },
   "scripts": {
     "dev": "tsup --watch",
