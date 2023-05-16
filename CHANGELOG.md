@@ -1,5 +1,11 @@
 # @princejoogie/chatgpt-cli
 
+## 0.3.0
+
+### Minor Changes
+
+- 4d22b9e: change build deps
+
 ## 0.2.7
 
 ### Patch Changes
