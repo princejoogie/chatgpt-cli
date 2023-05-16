@@ -23,4 +23,5 @@ const cli = meow(
   }
 );
 
+console.clear();
 render(<App cli={cli} />);
