@@ -1,8 +1,13 @@
-import https from "https";
+import fetch from "node-fetch";
 import React, { useState, useEffect } from "react";
 import { Spinner, TextInput } from "@inkjs/ui";
 import { Text, Box } from "ink";
 import { type Result } from "meow";
+import {
+  createParser,
+  type ParsedEvent,
+  type ReconnectInterval,
+} from "eventsource-parser";
 
 type Message = {
   role: "system" | "user" | "assistant";
@@ -26,8 +31,74 @@ const MessageItem = ({ msg }: { msg: Message }) => {
   );
 };
 
+const getStreamedResponse = async (
+  content: string,
+  messages: Message[],
+  setChunkedResponse: React.Dispatch<React.SetStateAction<string>>,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  if (!process.env["OPENAI_API_KEY"]) {
+    console.log("OPENAI_API_KEY key missing");
+    process.exit(1);
+  }
+
+  const body = JSON.stringify({
+    model: "gpt-3.5-turbo",
+    messages: [...messages, { role: "user", content }],
+    temperature: 0.0,
+    stream: true,
+  });
+
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
+
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + process.env["OPENAI_API_KEY"],
+    },
+    method: "POST",
+    body,
+  });
+
+  const stream = new ReadableStream({
+    async start(controller) {
+      function onParse(event: ParsedEvent | ReconnectInterval) {
+        if (event.type === "event") {
+          const data = event.data;
+          if (data === "[DONE]") {
+            setIsLoading(false);
+            controller.close();
+            return;
+          }
+          try {
+            const json = JSON.parse(data);
+            const text = json.choices[0].delta.content;
+
+            if (!text) return;
+
+            setChunkedResponse((e) => `${e}${text}`);
+            const queue = encoder.encode(text);
+            controller.enqueue(queue);
+          } catch (e) {
+            controller.error(e);
+          }
+        }
+      }
+
+      const parser = createParser(onParse);
+
+      for await (const chunk of res.body as any) {
+        parser.feed(decoder.decode(chunk));
+      }
+    },
+  });
+
+  return stream;
+};
+
 export default function App({ cli }: { cli: Result<any> }) {
-  const [isDone, setIsDone] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [chunkedResponse, setChunkedResponse] = useState("");
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -36,77 +107,15 @@ export default function App({ cli }: { cli: Result<any> }) {
     },
   ]);
 
-  const getStreamedResponse = (content: string, messages: Message[]) => {
-    if (!process.env["OPENAI_API_KEY"]) {
-      console.log("OPENAI_API_KEY key missing");
-      process.exit(1);
-    }
-
-    const req = https.request(
-      {
-        hostname: "api.openai.com",
-        port: 443,
-        path: "/v1/chat/completions",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + process.env["OPENAI_API_KEY"],
-        },
-      },
-      function (res) {
-        res.on("data", (chunk) => {
-          if (isDone) {
-            setIsDone(false);
-          }
-
-          const raw: string = chunk.toString();
-          if (raw.includes("[DONE]")) return;
-
-          const rawArray = raw
-            .replace(/data: {/gi, "{")
-            .split("\n")
-            .filter((e) => e !== "");
-
-          rawArray.forEach((e) => {
-            const parsed = JSON.parse(e);
-            if (parsed.choices[0].delta.content) {
-              setChunkedResponse(
-                (e) => `${e}${parsed.choices[0].delta.content}`
-              );
-            }
-          });
-        });
-        res.on("end", () => {
-          setIsDone(true);
-        });
-      }
-    );
-
-    const body = JSON.stringify({
-      model: "gpt-3.5-turbo",
-      messages: [...messages, { role: "user", content }],
-      temperature: 0.0,
-      stream: true,
-    });
-
-    req.on("error", (e) => {
-      console.error("problem with request:" + e.message);
-    });
-
-    req.write(body);
-
-    req.end();
-  };
-
   useEffect(() => {
-    if (isDone && !!chunkedResponse) {
+    if (!isLoading && !!chunkedResponse) {
       setMessages((old) => [
         ...old,
         { role: "assistant", content: chunkedResponse },
       ]);
       setChunkedResponse("");
     }
-  }, [isDone, chunkedResponse]);
+  }, [isLoading, chunkedResponse]);
 
   return (
     <Box flexDirection="column" padding={2}>
@@ -115,7 +124,7 @@ export default function App({ cli }: { cli: Result<any> }) {
           <MessageItem key={`message-${idx}`} msg={msg} />
         ))}
 
-        {!isDone && (
+        {isLoading && (
           <Box
             alignSelf="flex-start"
             borderColor="red"
@@ -136,9 +145,14 @@ export default function App({ cli }: { cli: Result<any> }) {
           placeholder="Send a message."
           onSubmit={async (content) => {
             inputIdx++;
-            setIsDone(false);
+            setIsLoading(true);
             setMessages((old) => [...old, { role: "user", content }]);
-            getStreamedResponse(content, messages);
+            await getStreamedResponse(
+              content,
+              messages,
+              setChunkedResponse,
+              setIsLoading
+            );
           }}
         />
       </Box>
