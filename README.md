@@ -7,9 +7,14 @@ ChatGpt in your terminal
 ## Usage
 
 ```bash
+# .bashrc or .zshrc
+export OPENAI_API_KEY=your-api-key
+# this environment variable is used as authentication in openai's api endpoints
+```
+
+```bash
 $ npm install -g @princejoogie/chatgpt-cli
 $ gpt # this is the bin when installing the package globally
-
 ```
 
 ## Todo
