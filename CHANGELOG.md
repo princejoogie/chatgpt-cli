@@ -1,5 +1,12 @@
 # @princejoogie/chatgpt-cli
 
+## 0.3.4
+
+### Patch Changes
+
+- a812f4a: - support stdin piping
+  - error message if invalid config
+
 ## 0.3.3
 
 ### Patch Changes
