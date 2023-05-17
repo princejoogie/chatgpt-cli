@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import React, { useState, useEffect } from "react";
 import { Spinner, TextInput } from "@inkjs/ui";
-import { Text, Box } from "ink";
+import { Text, Box, useStdin } from "ink";
 import { type Result } from "meow";
 import {
   createParser,
@@ -98,6 +98,8 @@ const getStreamedResponse = async (
 };
 
 export default function App({ cli }: { cli: Result<any> }) {
+  const { stdin, isRawModeSupported } = useStdin();
+
   const [isLoading, setIsLoading] = useState(false);
   const [chunkedResponse, setChunkedResponse] = useState("");
   const [messages, setMessages] = useState<Message[]>([
@@ -106,6 +108,38 @@ export default function App({ cli }: { cli: Result<any> }) {
       content: "Hey there! What can I help you with today?",
     },
   ]);
+
+  const onSubmit = async (content: string) => {
+    inputIdx++;
+    setIsLoading(true);
+    setMessages((old) => [...old, { role: "user", content }]);
+    await getStreamedResponse(
+      content,
+      messages,
+      setChunkedResponse,
+      setIsLoading
+    );
+  };
+
+  useEffect(() => {
+    const readStdin = async () => {
+      if (!stdin.isTTY) {
+        const result = [];
+        let length = 0;
+
+        for await (const chunk of stdin) {
+          result.push(chunk);
+          length += chunk.length;
+        }
+
+        const buffer = Buffer.concat(result, length);
+        const content = buffer.toString();
+        await onSubmit(content);
+      }
+    };
+
+    readStdin();
+  }, []);
 
   useEffect(() => {
     if (!isLoading && !!chunkedResponse) {
@@ -137,24 +171,20 @@ export default function App({ cli }: { cli: Result<any> }) {
       </Box>
 
       <Box borderStyle="single" borderColor="grey">
-        <TextInput
-          key={`input-state-${inputIdx}`}
-          suggestions={messages
-            .filter((msg) => msg.role === "user")
-            .map((msg) => msg.content)}
-          placeholder="Send a message."
-          onSubmit={async (content) => {
-            inputIdx++;
-            setIsLoading(true);
-            setMessages((old) => [...old, { role: "user", content }]);
-            await getStreamedResponse(
-              content,
-              messages,
-              setChunkedResponse,
-              setIsLoading
-            );
-          }}
-        />
+        {isRawModeSupported ? (
+          <TextInput
+            key={`input-state-${inputIdx}`}
+            suggestions={messages
+              .filter((msg) => msg.role === "user")
+              .map((msg) => msg.content)}
+            placeholder="Send a message."
+            onSubmit={onSubmit}
+          />
+        ) : (
+          <Text>
+            To use this input, please run the application without piping
+          </Text>
+        )}
       </Box>
 
       <Box paddingX={1}>
