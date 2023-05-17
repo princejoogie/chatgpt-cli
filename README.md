@@ -6,6 +6,7 @@ ChatGpt in your terminal
 
 ## Usage
 
+> Generate an API key -> https://platform.openai.com/account/api-keys
 ```bash
 # .bashrc or .zshrc
 export OPENAI_API_KEY=your-api-key
