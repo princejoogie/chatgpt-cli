@@ -1,5 +1,11 @@
 # @princejoogie/chatgpt-cli
 
+## 0.3.3
+
+### Patch Changes
+
+- 3695d76: use text encoder/decoder
+
 ## 0.3.2
 
 ### Patch Changes
