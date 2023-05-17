@@ -17,6 +17,7 @@ const cli = meow(
 
   Examples
     $ gpt
+    $ cat ./input.txt | gpt
 `,
   {
     importMeta: import.meta,
