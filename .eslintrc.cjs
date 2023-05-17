@@ -19,5 +19,6 @@ module.exports = {
     "@typescript-eslint/restrict-template-expressions": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/restrict-plus-operands": "off",
   },
 };

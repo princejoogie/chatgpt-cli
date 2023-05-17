@@ -4,6 +4,7 @@ import React from "react";
 import { render } from "ink";
 import meow from "meow";
 import App from "./app.js";
+import { Alert } from "@inkjs/ui";
 
 const cli = meow(
   `
@@ -16,6 +17,7 @@ const cli = meow(
 
   Examples
     $ gpt
+    $ cat ./input.txt | gpt
 `,
   {
     importMeta: import.meta,
@@ -24,4 +26,13 @@ const cli = meow(
 );
 
 console.clear();
-render(<App cli={cli} />);
+const hasApiKey = !!process.env["OPENAI_API_KEY"];
+if (!hasApiKey) {
+  render(
+    <Alert variant="warning">
+      No `OPENAI_API_KEY` found in environment variables.
+    </Alert>
+  );
+} else {
+  render(<App cli={cli} />);
+}
