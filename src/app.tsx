@@ -37,11 +37,6 @@ const getStreamedResponse = async (
   setChunkedResponse: React.Dispatch<React.SetStateAction<string>>,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
-  if (!process.env["OPENAI_API_KEY"]) {
-    console.log("OPENAI_API_KEY key missing");
-    process.exit(1);
-  }
-
   const body = JSON.stringify({
     model: "gpt-3.5-turbo",
     messages: [...messages, { role: "user", content }],
