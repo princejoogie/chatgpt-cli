@@ -1,7 +1,7 @@
 {
   "name": "@princejoogie/chatgpt-cli",
   "private": false,
-  "version": "0.3.2",
+  "version": "0.3.3",
   "license": "MIT",
   "author": "princejoogie",
   "type": "module",
